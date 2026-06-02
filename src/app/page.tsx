@@ -19,7 +19,7 @@ export default function Home() {
             </p>
           </div>
           <a
-            href="https://github.com"
+            href="https://github.com/Harshit181003/ai-resume-analyzer"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-slate-500 hover:text-accent-glow transition"

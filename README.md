@@ -2,6 +2,8 @@
 
 AI-powered resume analyzer (ATS score + job match + bullet rewrites) built with **Next.js**.
 
+**Live demo**: `https://ai-resume-analyzer-jet-psi.vercel.app/`
+
 ## Run locally
 
 Prereqs: Node.js 18+
