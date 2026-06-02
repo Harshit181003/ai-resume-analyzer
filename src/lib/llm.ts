@@ -61,19 +61,27 @@ function buildUserPrompt(req: AnalysisRequest): string {
 export async function analyzeResume(
   req: AnalysisRequest
 ): Promise<ResumeAnalysis> {
-  const provider = process.env.LLM_PROVIDER ?? "openai";
+  const provider = resolveProvider();
 
-  if (provider === "groq") {
-    return analyzeWithGroq(req);
-  }
+  if (provider === "groq") return analyzeWithGroq(req);
   return analyzeWithOpenAI(req);
+}
+
+function resolveProvider(): "openai" | "groq" {
+  const explicit = (process.env.LLM_PROVIDER ?? "").toLowerCase().trim();
+  if (explicit === "groq") return "groq";
+  if (explicit === "openai") return "openai";
+
+  // Auto-detect: prefer Groq if it's configured (common for free deploys).
+  if (process.env.GROQ_API_KEY?.trim()) return "groq";
+  return "openai";
 }
 
 async function analyzeWithOpenAI(req: AnalysisRequest): Promise<ResumeAnalysis> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "OPENAI_API_KEY is not set. Add it in .env.local or Vercel environment variables."
+      "OPENAI_API_KEY is not set. Either set OPENAI_API_KEY, or set GROQ_API_KEY (or LLM_PROVIDER=groq) to use Groq."
     );
   }
 
